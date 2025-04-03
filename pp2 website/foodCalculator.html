@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Nutrition Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+	overflow-x:hidden;
+	overflow-y:hidden;
+        }
+ body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(8px);
+            z-index: -1;
+        }
+.navbar {
+    background-color: #1abc9c;
+    padding: 15px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+.navbar a {
+    position: relative;
+    color: black; /*white*/
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: white; /*#1abc9c*/
+}
+
+/* Underline Effect */
+.navbar a::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0%;
+    height: 4px;
+    bottom: -5px;
+    left: 0;  /* Start from the left */
+    background: white;
+    border-radius: 4px;
+    transition: width 0.4s ease-in-out;
+}
+
+.navbar a:hover::before {
+    width: 100%;  /* Expands fully */
+}
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            margin-top: 10%;
+            position: relative;
+        }
+        h2 {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input, select {
+            padding: 12px;
+            border: 2px solid #dcdfe3;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            background-color: #f9fafb;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #1abc9c;
+            outline: none;
+        }
+        .btn {
+            background-color: #1abc9c;
+            color: white;
+            padding: 14px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #16a085;
+        }
+        #result {
+            margin-top: 15px;
+            font-weight: 600;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="updated_health_calc.html">BMI Calculator</a>
+        <a href="foodCalculator.html">Food Calculator</a>
+        <a href="mealCalculator.html">Meal Calculator</a>
+    </div>
+    <div class="container">
+        <h2>Calorie Intake Calculator</h2>
+        <div class="input-group">
+            <label for="foodSelect">Choose Food:</label>
+            <select id="foodSelect">
+                <option value="">Select food</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="servingInput">Serving Size (per 100g):</label>
+            <input type="number" id="servingInput" min="0.1" step="0.1" style="width: 94.5%">
+        </div>
+        <button class="btn" onclick="calculateCalories()">Calculate</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        async function fetchFoodDatabase() {
+            try {
+                const response = await fetch('foodDatabase.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                return await response.json();
+            } catch (error) {
+                console.error('Fetch failed, falling back to local data', error);
+                return [
+                  { "name": "Acorn Squash", "calories": 40, "fat": 0.1, "carbs": 10, "protein": 1 },
+{ "name": "Almonds", "calories": 579, "fat": 49, "carbs": 22, "protein": 21 },
+{ "name": "Anise Seeds", "calories": 337, "fat": 15, "carbs": 50, "protein": 18 },
+{ "name": "Apple", "calories": 52, "fat": 0.2, "carbs": 14, "protein": 0.3 },
+{ "name": "Apricot", "calories": 48, "fat": 0.5, "carbs": 12, "protein": 1.3 },
+{ "name": "Artichoke", "calories": 47, "fat": 0.2, "carbs": 11, "protein": 3.5 },
+{ "name": "Aubergine (Eggplant)", "calories": 25, "fat": 0.2, "carbs": 6, "protein": 1 },
+{ "name": "Avocado", "calories": 160, "fat": 15, "carbs": 9, "protein": 2 },
+{ "name": "Banana", "calories": 89, "fat": 0.3, "carbs": 23, "protein": 1.1 },
+{ "name": "Bay Leaves", "calories": 313, "fat": 8.4, "carbs": 75, "protein": 7.6 },
+{ "name": "Beetroot", "calories": 43, "fat": 0.2, "carbs": 10, "protein": 1.6 },
+{ "name": "Bell Pepper", "calories": 20, "fat": 0.2, "carbs": 5, "protein": 0.9 },
+{ "name": "Black Beans", "calories": 132, "fat": 0.5, "carbs": 24, "protein": 8.9 },
+{ "name": "Blueberry", "calories": 57, "fat": 0.3, "carbs": 14.5, "protein": 0.7 },
+{ "name": "Brussels Sprouts", "calories": 43, "fat": 0.3, "carbs": 9, "protein": 3.4 },
+{ "name": "Broccoli", "calories": 55, "fat": 0.6, "carbs": 11, "protein": 3.7 },
+{ "name": "Butter", "calories": 717, "fat": 81, "carbs": 1, "protein": 1 },
+{ "name": "Cabbage", "calories": 25, "fat": 0.1, "carbs": 5, "protein": 1.3 },
+{ "name": "Caraway Seeds", "calories": 375, "fat": 15, "carbs": 44, "protein": 18 },
+{ "name": "Carrot", "calories": 41, "fat": 0.2, "carbs": 10, "protein": 0.9 },
+{ "name": "Cashews", "calories": 553, "fat": 44, "carbs": 30, "protein": 18 },
+{ "name": "Cauliflower", "calories": 25, "fat": 0.3, "carbs": 5, "protein": 1.9 },
+{ "name": "Chard", "calories": 19, "fat": 0.2, "carbs": 4, "protein": 1.6 },
+{ "name": "Chickpeas", "calories": 164, "fat": 2.6, "carbs": 27.4, "protein": 8.9 },
+{ "name": "Chili Flakes", "calories": 318, "fat": 17, "carbs": 58, "protein": 12 },
+{ "name": "Chili Peppers", "calories": 40, "fat": 0.4, "carbs": 9, "protein": 2 },
+{ "name": "Cilantro", "calories": 23, "fat": 0.5, "carbs": 3.7, "protein": 2 },
+{ "name": "Coconut Milk", "calories": 230, "fat": 24, "carbs": 6, "protein": 2 },
+{ "name": "Coconut Oil", "calories": 862, "fat": 100, "carbs": 0, "protein": 0 },
+{ "name": "Coconut Water", "calories": 19, "fat": 0.2, "carbs": 4.4, "protein": 0.2 },
+{ "name": "Collard Greens", "calories": 32, "fat": 0.6, "carbs": 6, "protein": 3.4 },
+{ "name": "Cranberries", "calories": 46, "fat": 0.1, "carbs": 12, "protein": 0.4 },
+{ "name": "Cucumber", "calories": 15, "fat": 0.1, "carbs": 4, "protein": 0.7 },
+{ "name": "Date Syrup", "calories": 277, "fat": 0.2, "carbs": 75, "protein": 1.8 },
+{ "name": "Dragon Fruit", "calories": 50, "fat": 0.1, "carbs": 12, "protein": 1 },
+{ "name": "Egg", "calories": 155, "fat": 11, "carbs": 1.1, "protein": 13 },
+{ "name": "Eggplant", "calories": 25, "fat": 0.2, "carbs": 6, "protein": 1 },
+{ "name": "Fennel", "calories": 31, "fat": 0.2, "carbs": 7, "protein": 1.2 },
+{ "name": "Fennel Seeds", "calories": 345, "fat": 15, "carbs": 52, "protein": 15 },
+{ "name": "Figs", "calories": 74, "fat": 0.3, "carbs": 19, "protein": 0.8 },
+{ "name": "Garlic", "calories": 149, "fat": 0.5, "carbs": 33, "protein": 6.4 },
+{ "name": "Grapes", "calories": 69, "fat": 0.2, "carbs": 18, "protein": 0.7 },
+{ "name": "Guava", "calories": 68, "fat": 1, "carbs": 15, "protein": 2.5 },
+{ "name": "Ice Cream", "calories": 207, "fat": 11, "carbs": 24, "protein": 3 },
+{ "name": "Kale", "calories": 33, "fat": 0.6, "carbs": 7, "protein": 2.9 },
+{ "name": "Kiwifruit", "calories": 61, "fat": 0.5, "carbs": 15, "protein": 1.1 },
+{ "name": "Lettuce", "calories": 15, "fat": 0.2, "carbs": 3, "protein": 1 },
+{ "name": "Lemon", "calories": 29, "fat": 0.3, "carbs": 9, "protein": 1 },
+{ "name": "Lemon Juice", "calories": 22, "fat": 0.1, "carbs": 7, "protein": 0.2 },
+{ "name": "Leeks", "calories": 61, "fat": 0.3, "carbs": 14, "protein": 1.5 },
+{ "name": "Lentils", "calories": 116, "fat": 0.4, "carbs": 20, "protein": 9 },
+{ "name": "Mango", "calories": 60, "fat": 0.4, "carbs": 15, "protein": 0.8 },
+{ "name": "Melon", "calories": 35, "fat": 0.2, "carbs": 9, "protein": 0.6 },
+{ "name": "Milk (Whole)", "calories": 42, "fat": 1, "carbs": 5, "protein": 3.4 },
+{ "name": "Mushrooms", "calories": 22, "fat": 0.3, "carbs": 4, "protein": 3.1 },
+{ "name": "Nectarine", "calories": 44, "fat": 0.3, "carbs": 11, "protein": 0.9 },
+{ "name": "Nigella Seeds", "calories": 333, "fat": 21, "carbs": 41, "protein": 17 },
+{ "name": "Olives", "calories": 115, "fat": 10, "carbs": 6, "protein": 1 },
+{ "name": "Oatmeal", "calories": 68, "fat": 1.4, "carbs": 12, "protein": 2.4 },
+{ "name": "Onion", "calories": 40, "fat": 0.1, "carbs": 9, "protein": 1 },
+{ "name": "Orange", "calories": 62, "fat": 0.2, "carbs": 15.4, "protein": 1.2 },
+{ "name": "Orange Juice", "calories": 45, "fat": 0.2, "carbs": 11, "protein": 0.7 },
+{ "name": "Papaya", "calories": 43, "fat": 0.3, "carbs": 11, "protein": 0.5 },
+{ "name": "Parsnips", "calories": 75, "fat": 0.3, "carbs": 18, "protein": 1.6 },
+{ "name": "Peanut Butter", "calories": 588, "fat": 50, "carbs": 20, "protein": 25 },
+{ "name": "Peas", "calories": 81, "fat": 0.4, "carbs": 14, "protein": 5 },
+{ "name": "Pineapple", "calories": 50, "fat": 0.1, "carbs": 13, "protein": 0.5 },
+{ "name": "Plums", "calories": 46, "fat": 0.3, "carbs": 11, "protein": 0.7 },
+{ "name": "Poppy Seeds", "calories": 525, "fat": 42, "carbs": 28, "protein": 18 },
+{ "name": "Pumpkin", "calories": 26, "fat": 0.1, "carbs": 7, "protein": 1 },
+{ "name": "Pomegranate", "calories": 83, "fat": 1.2, "carbs": 19, "protein": 1.7 },
+{ "name": "Quinoa", "calories": 120, "fat": 1.9, "carbs": 21, "protein": 4.1 },
+{ "name": "Radishes", "calories": 16, "fat": 0.1, "carbs": 4, "protein": 0.7 },
+{ "name": "Raspberries", "calories": 52, "fat": 0.7, "carbs": 12, "protein": 1.5 },
+{ "name": "Red Bell Pepper", "calories": 31, "fat": 0.3, "carbs": 7, "protein": 1 },
+{ "name": "Rosemary", "calories": 131, "fat": 5.9, "carbs": 20, "protein": 3.3 },
+{ "name": "Spinach", "calories": 23, "fat": 0.4, "carbs": 3.6, "protein": 2.9 },
+{ "name": "Strawberry", "calories": 32, "fat": 0.3, "carbs": 7.7, "protein": 0.7 },
+{ "name": "Sweet Potato", "calories": 86, "fat": 0.1, "carbs": 20, "protein": 1.6 },
+{ "name": "Tomato", "calories": 18, "fat": 0.2, "carbs": 3.9, "protein": 0.9 },
+{ "name": "Turnips", "calories": 28, "fat": 0.1, "carbs": 6, "protein": 0.9 },
+{ "name": "Watermelon", "calories": 30, "fat": 0.2, "carbs": 8, "protein": 0.6 },
+{ "name": "Zucchini", "calories": 17, "fat": 0.3, "carbs": 3.1, "protein": 1.2 },
+{ "name": "Zesty Lemon", "calories": 29, "fat": 0.3, "carbs": 9, "protein": 1 },
+{ "name": "Zante Currants", "calories": 104, "fat": 0.5, "carbs": 27, "protein": 1.2 }
+
+];
+            }
+        }
+
+        async function populateFoodSelect() {
+            const foodDatabase = await fetchFoodDatabase();
+            const foodSelect = document.getElementById('foodSelect');
+            foodDatabase.forEach(food => {
+                const option = document.createElement('option');
+                option.value = food.name.toLowerCase();
+                option.textContent = food.name;
+                foodSelect.appendChild(option);
+            });
+        }
+
+        async function calculateCalories() {
+            const foodDatabase = await fetchFoodDatabase();
+            let foodName = document.getElementById("foodSelect").value;
+            let servingSize = parseFloat(document.getElementById("servingInput").value);
+
+            if (!foodName) {
+                alert("Please select a food!");
+                return;
+            }
+
+            if (isNaN(servingSize) || servingSize <= 0) {
+                alert("Please enter a valid serving size!");
+                return;
+            }
+
+            const food = foodDatabase.find(item => item.name.toLowerCase() === foodName);
+
+            if (food) {
+                let calories = (food.calories * servingSize).toFixed(2);
+                let fat = (food.fat * servingSize).toFixed(2);
+                let carbs = (food.carbs * servingSize).toFixed(2);
+                let protein = (food.protein * servingSize).toFixed(2);
+
+                document.getElementById("result").innerHTML = `
+                    <p><strong>${food.name} (${servingSize}x serving):</strong></p>
+                    <p>Calories: ${calories} kcal</p>
+                    <p>Fat: ${fat} g</p>
+                    <p>Carbs: ${carbs} g</p>
+                    <p>Protein: ${protein} g</p>
+                `;
+            } else {
+                document.getElementById("result").innerHTML = "Food not found in database!";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateFoodSelect);
+    </script>
+</body>
+
+</html>
