@@ -158,7 +158,7 @@
     <script>
         async function fetchFoodDatabase() {
             try {
-                const response = await fetch('foodDatabase.json');
+                const response = await fetch('mealDatabase.json');
                 if (!response.ok) throw new Error('Network response was not ok');
                 return await response.json();
             } catch (error) {
