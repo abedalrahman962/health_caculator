@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,7 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
-            overflow-y: hidden;
+            /*overflow-y: hidden;*/
         }
 
         body::before {
@@ -102,7 +103,8 @@
             color: #34495e;
         }
 
-        input, select {
+        input,
+        select {
             padding: 12px;
             border: 2px solid #dcdfe3;
             border-radius: 8px;
@@ -112,7 +114,8 @@
             transition: border-color 0.3s;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             border-color: #1abc9c;
             outline: none;
         }
@@ -153,6 +156,7 @@
             from {
                 transform: translateY(-100%);
             }
+
             to {
                 transform: translateY(0);
             }
@@ -163,6 +167,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -170,8 +175,12 @@
         }
     </style>
 </head>
+
 <body>
     <div class="navbar">
+        <!-- <a href="homePage.html">
+            <img src="test.png" style="width: 64px; height: 64px;">
+        </a> -->
         <a href="updated_health_calc.html">BMI Calculator</a>
         <a href="foodCalculator.html">Food Calculator</a>
         <a href="mealCalculator.html">Meal Calculator</a>
@@ -187,15 +196,15 @@
         </div>
         <div class="input-group">
             <label for="age">Age (years):</label>
-            <input type="number" id="age" min="1">
+            <input type="number" id="age" min="1" style="width: 94.5%;">
         </div>
         <div class="input-group">
             <label for="height">Height (cm):</label>
-            <input type="number" id="height" min="50">
+            <input type="number" id="height" min="50" style="width: 94.5%;">
         </div>
         <div class="input-group">
             <label for="weight">Weight (kg):</label>
-            <input type="number" id="weight" min="10">
+            <input type="number" id="weight" min="10" style="width: 94.5%;">
         </div>
         <div class="input-group">
             <label for="activity">Activity Level:</label>
@@ -235,4 +244,5 @@
         }
     </script>
 </body>
+
 </html>
