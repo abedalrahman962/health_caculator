@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Health & Nutrition homepage. Links to BMI Calculator, Food Calculator, and Meal Calculator">
+    <meta name="keywords" content="BMI Calculator, Food Calculator, Meal Calculator, Health, Nutrition">
+    <meta name="author" content="Abedalrahman Alabedalhamid, Ahmad Terjman, Adam Jundi, Othman Abedalwahad, Ibrahim Solieman, Hamza Shawki, Rida Assaf">
+    <title>Health & Nutrition Homepage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a8e6cf, #d0f4f0); /* Soft green to light mint blue gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            background-color: #1abc9c; /* Fresh, deeper green */
+            padding: 20px 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            transform: scale(1.1);
+            background-color: #4caf50; /* Slightly brighter green on hover */
+        }
+
+        .main-content {
+            text-align: center;
+            color: #1b5e20; /* Deep green text for harmony */
+            margin-top: 100px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .main-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-out;
+        }
+
+        .main-content p {
+            font-size: 1.8em;
+            font-weight: 300;
+            margin-top: 10px;
+            animation: slideIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .created-by {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 400;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .created-by p {
+            margin: 5px 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                gap: 15px;
+                padding: 15px 10px;
+            }
+
+            .main-content h1 {
+                font-size: 2.5em;
+            }
+
+            .main-content p {
+                font-size: 1.4em;
+            }
+
+            .created-by {
+                bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="updated_health_calc.html">BMI Calculator</a>
+        <a href="foodCalculator.html">Food Calculator</a>
+        <a href="mealCalculator.html">Meal Calculator</a>
+    </div>
+
+    <div class="main-content">
+        <h1>Welcome to Health & Nutrition Tools</h1>
+        <p>Select a tool to get started and take control of your health journey!</p>
+    </div>
+
+    <div class="created-by">
+        <p>Created by:</p>
+        <p>Abedalrahman Alabedalhamid</p>
+        <p>Ahmad Terjman</p>
+        <p>Adam Jundi</p>
+        <p>Othman Abedalwahad</p>
+        <p>Ibrahim Solieman</p>
+        <p>Hamza Shawki</p>
+        <p>Rida Assaf</p>
+    </div>
+
+</body>
+</html>
