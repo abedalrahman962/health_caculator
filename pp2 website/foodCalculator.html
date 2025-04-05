@@ -88,7 +88,7 @@
             text-align: center;
             margin-top: 100px;
             animation: fadeIn 2s ease-out;
-            height: 600px;
+            height: 700px;
             overflow-y: auto;
             position: relative;
             z-index: 1;
@@ -108,6 +108,16 @@
             background-color: #f9fafb;
             margin-bottom: 10px;
             position: relative;
+        }
+
+        #gramInput {
+            padding: 12px;
+            border: 2px solid #dcdfe3;
+            border-radius: 8px;
+            width: 90%;
+            font-size: 16px;
+            background-color: #f9fafb;
+            margin-bottom: 20px;
         }
 
         .btn {
@@ -142,7 +152,7 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             position: absolute;
-            width: 88%; /* Match width of input field */
+            width: 88%;
             box-sizing: border-box;
             z-index: 2;
             display: none;
@@ -195,6 +205,8 @@
         <h2>Food Nutrition Checker</h2>
         <input type="text" id="foodInput" placeholder="Enter food name (e.g., Apple)" oninput="filterFoodList()" autocomplete="off">
         <div class="autocomplete-suggestions" id="suggestionsList"></div>
+        <p><em>One serving = 100g</em></p>
+        <input type="number" id="gramInput" placeholder="Enter serving size in grams (e.g., 150)" min="1">
         <button class="btn" onclick="lookupFood()">Check Nutrition</button>
         <div class="output" id="foodOutput"></div>
     </div>
@@ -232,23 +244,35 @@
         function filterFoodList() {
             const foodInput = document.getElementById('foodInput').value.toLowerCase().trim();
             const filteredData = foodData.filter(item => item.name.toLowerCase().includes(foodInput));
-
-            displaySuggestions(filteredData); // Update suggestions
+            displaySuggestions(filteredData);
         }
 
         // Select the food and display it in the input
         function selectFood(foodName) {
             document.getElementById('foodInput').value = foodName;
-            document.getElementById('suggestionsList').style.display = 'none'; // Hide suggestions after selection
+            document.getElementById('suggestionsList').style.display = 'none';
         }
 
         // Lookup food and display nutrition facts
         async function lookupFood() {
             const foodName = document.getElementById('foodInput').value.toLowerCase().trim();
+            const gramValue = parseFloat(document.getElementById('gramInput').value.trim()) || 100;
             const output = document.getElementById('foodOutput');
+
             const found = foodData.find(item => item.name.toLowerCase() === foodName);
+
             if (found) {
-                output.innerHTML = `<p><strong>${found.name}</strong><br>Calories: ${found.calories} kcal<br>Carbs: ${found.carbs} g<br>Protein: ${found.protein} g<br>Fat: ${found.fat} g</p>`;
+                const factor = gramValue / 100;
+                output.innerHTML = `
+                    <p><strong>${found.name}</strong></p>
+                    <p>For <strong>${gramValue}g</strong> serving:</p>
+                    <p>
+                        Calories: ${(found.calories * factor).toFixed(2)} kcal<br>
+                        Carbs: ${(found.carbs * factor).toFixed(2)} g<br>
+                        Protein: ${(found.protein * factor).toFixed(2)} g<br>
+                        Fat: ${(found.fat * factor).toFixed(2)} g
+                    </p>
+                `;
             } else {
                 output.innerHTML = `<p>Food item not found in the database. Please try another.</p>`;
             }
