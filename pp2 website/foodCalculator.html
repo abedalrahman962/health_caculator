@@ -86,7 +86,7 @@
             width: 90%;
             max-width: 600px;
             text-align: center;
-            margin-top: 100px; /* Adjust this to create space below the navbar */
+            margin-top: 100px;
             animation: fadeIn 2s ease-out;
             max-height: 80vh;
             overflow-y: auto;
@@ -103,10 +103,11 @@
             padding: 12px;
             border: 2px solid #dcdfe3;
             border-radius: 8px;
-            width: 100%;
+            width: 90%;
             font-size: 16px;
             background-color: #f9fafb;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            position: relative;
         }
 
         .btn {
@@ -131,6 +132,30 @@
             margin-top: 20px;
             font-weight: 600;
             color: #2c3e50;
+        }
+
+        .autocomplete-suggestions {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            position: absolute;
+            width: 88%; /* Match width of input field */
+            box-sizing: border-box;
+            z-index: 2;
+            display: none;
+        }
+
+        .autocomplete-suggestions div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #f9fafb;
+            transition: background-color 0.2s ease;
+        }
+
+        .autocomplete-suggestions div:hover {
+            background-color: #e1e1e1;
         }
 
         @keyframes navbarSlide {
@@ -159,7 +184,7 @@
 
 <body>
     <div class="navbar">
-        <a href="index.html">&#8592; Back to Home</a>
+        <a href="homePage.html">&#8592; Back to Home</a>
         <a href="updated_health_calc.html">BMI Calculator</a>
         <a href="foodCalculator.html">Food Calculator</a>
         <a href="mealCalculator.html">Meal Calculator</a>
@@ -167,30 +192,78 @@
 
     <div class="container">
         <h2>Food Nutrition Checker</h2>
-        <input type="text" id="foodInput" placeholder="Enter food name (e.g., Apple)">
+        <input type="text" id="foodInput" placeholder="Enter food name (e.g., Apple)" oninput="filterFoodList()" autocomplete="off">
+        <div class="autocomplete-suggestions" id="suggestionsList"></div>
         <button class="btn" onclick="lookupFood()">Check Nutrition</button>
         <div class="output" id="foodOutput"></div>
     </div>
 
     <script>
+        let foodData = [];
+
+        // Fetching food data from the server or JSON file
+        async function fetchFoodData() {
+            try {
+                const response = await fetch('foodDatabase.json');
+                foodData = await response.json();
+                displaySuggestions(foodData); // Show all foods initially
+            } catch (err) {
+                console.error('Error loading food data', err);
+            }
+        }
+
+        // Display food items in a scrollable list
+        function displaySuggestions(data) {
+            const suggestionsList = document.getElementById('suggestionsList');
+            suggestionsList.innerHTML = '';
+
+            data.forEach(item => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.textContent = item.name;
+                suggestionItem.onclick = () => selectFood(item.name);
+                suggestionsList.appendChild(suggestionItem);
+            });
+
+            suggestionsList.style.display = 'block'; // Show suggestions by default
+        }
+
+        // Filter the food data based on input
+        function filterFoodList() {
+            const foodInput = document.getElementById('foodInput').value.toLowerCase().trim();
+            const filteredData = foodData.filter(item => item.name.toLowerCase().includes(foodInput));
+
+            displaySuggestions(filteredData); // Update suggestions
+        }
+
+        // Select the food and display it in the input
+        function selectFood(foodName) {
+            document.getElementById('foodInput').value = foodName;
+            document.getElementById('suggestionsList').style.display = 'none'; // Hide suggestions after selection
+        }
+
+        // Lookup food and display nutrition facts
         async function lookupFood() {
             const foodName = document.getElementById('foodInput').value.toLowerCase().trim();
             const output = document.getElementById('foodOutput');
-            try {
-                const response = await fetch('foodDatabase.json');
-                const data = await response.json();
-
-                const found = data.find(item => item.name.toLowerCase() === foodName);
-                if (found) {
-                    output.innerHTML = `<p><strong>${found.name}</strong><br>Calories: ${found.calories} kcal<br>Carbs: ${found.carbs} g<br>Protein: ${found.protein} g<br>Fat: ${found.fat} g</p>`;
-                } else {
-                    output.innerHTML = `<p>Food item not found in the database. Please try another.</p>`;
-                }
-            } catch (err) {
-                output.innerHTML = `<p>Error loading database. Please try again later.</p>`;
-                console.error(err);
+            const found = foodData.find(item => item.name.toLowerCase() === foodName);
+            if (found) {
+                output.innerHTML = `<p><strong>${found.name}</strong><br>Calories: ${found.calories} kcal<br>Carbs: ${found.carbs} g<br>Protein: ${found.protein} g<br>Fat: ${found.fat} g</p>`;
+            } else {
+                output.innerHTML = `<p>Food item not found in the database. Please try another.</p>`;
             }
         }
+
+        // Close suggestions if clicked outside
+        document.addEventListener('click', function (e) {
+            const suggestionsList = document.getElementById('suggestionsList');
+            const foodInput = document.getElementById('foodInput');
+            if (!foodInput.contains(e.target) && !suggestionsList.contains(e.target)) {
+                suggestionsList.style.display = 'none';
+            }
+        });
+
+        // Fetch the food data when the page loads
+        window.onload = fetchFoodData;
     </script>
 </body>
 
