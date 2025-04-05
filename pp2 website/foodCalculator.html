@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,22 +103,11 @@
             padding: 12px;
             border: 2px solid #dcdfe3;
             border-radius: 8px;
-            width: 80%;
+            width: 90%;
             font-size: 16px;
             background-color: #f9fafb;
             margin-bottom: 10px;
             position: relative;
-            display: inline-block;
-        }
-
-        .arrow-btn {
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            position: absolute;
-            right: 10px;
-            top: 12px;
         }
 
         .btn {
@@ -173,6 +163,7 @@
             from {
                 transform: translateY(-100%);
             }
+
             to {
                 transform: translateY(0);
             }
@@ -183,6 +174,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -201,10 +193,7 @@
 
     <div class="container">
         <h2>Food Nutrition Checker</h2>
-        <div style="position: relative;">
-            <input type="text" id="foodInput" placeholder="Select food" readonly>
-            <button class="arrow-btn" onclick="toggleSuggestions()">&#x25BC;</button>
-        </div>
+        <input type="text" id="foodInput" placeholder="Select food" onclick="showSuggestions()" autocomplete="off">
         <div class="autocomplete-suggestions" id="suggestionsList"></div>
         <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
         <button class="btn" onclick="lookupFood()">Check Nutrition</button>
@@ -218,7 +207,6 @@
             try {
                 const response = await fetch('foodDatabase.json');
                 foodData = await response.json();
-                console.log(foodData);
             } catch (err) {
                 console.error('Error loading food data', err);
             }
@@ -227,10 +215,6 @@
         function displaySuggestions(data) {
             const suggestionsList = document.getElementById('suggestionsList');
             suggestionsList.innerHTML = '';
-            if (data.length === 0) {
-                suggestionsList.innerHTML = `<div>No food items available</div>`;
-                return;
-            }
 
             data.forEach(item => {
                 const suggestionItem = document.createElement('div');
@@ -238,11 +222,12 @@
                 suggestionItem.onclick = () => selectFood(item.name);
                 suggestionsList.appendChild(suggestionItem);
             });
+
+            suggestionsList.style.display = 'block';
         }
 
-        function toggleSuggestions() {
-            const suggestionsList = document.getElementById('suggestionsList');
-            suggestionsList.style.display = (suggestionsList.style.display === 'block') ? 'none' : 'block';
+        function showSuggestions() {
+            displaySuggestions(foodData);
         }
 
         function selectFood(foodName) {
@@ -255,6 +240,11 @@
             const servings = parseFloat(document.getElementById('servingInput').value.trim()) || 1;
             const totalGrams = servings * 100;
             const output = document.getElementById('foodOutput');
+
+            if (!foodName) {
+                output.innerHTML = "<p>Please select a food item.</p>";
+                return;
+            }
 
             const found = foodData.find(item => item.name.toLowerCase() === foodName);
 
@@ -271,7 +261,7 @@
                     </p>
                 `;
             } else {
-                output.innerHTML = `<p>Food item not found in the database. Please try another.</p>`;
+                output.innerHTML = "<p>Food item not found in the database. Please try another.</p>";
             }
         }
 
@@ -286,4 +276,5 @@
         window.onload = fetchFoodData;
     </script>
 </body>
+
 </html>
