@@ -163,9 +163,10 @@
             }
         }
 
+        /* Updated styles for the created-by and presented-to sections */
         .created-by,
         .presented-to {
-            position: fixed;  /* Keep them in fixed position */
+            position: absolute;  /* Absolute positioning inside the body */
             padding: 5px 10px;  /* Reduced padding */
             font-size: 12px;  /* Smaller font size */
             background: rgba(0, 0, 0, 0.4);
@@ -177,13 +178,13 @@
         }
 
         .created-by {
-            bottom: 20px;  /* Lowered from the bottom */
-            left: 20px;    /* Position on the left */
+            bottom: 10px;  /* Position 10px from the bottom */
+            left: 10px;    /* Position on the left */
         }
 
         .presented-to {
-            bottom: 20px;  /* Lowered from the bottom */
-            right: 20px;   /* Position on the right */
+            bottom: 10px;  /* Position 10px from the bottom */
+            right: 10px;   /* Position on the right */
         }
     </style>
 </head>
