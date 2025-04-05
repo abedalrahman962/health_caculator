@@ -2,315 +2,313 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Nutrition Lookup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Nutrition Lookup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            filter: blur(8px);
-            z-index: -1;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        .navbar {
-            background-color: rgba(26, 188, 156, 0.75);
-            backdrop-filter: blur(8px);
-            padding: 15px 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 80px;
-            animation: navbarSlide 1s ease-out;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 2;
-        }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      filter: blur(8px);
+      z-index: -1;
+    }
 
-        .hamburger {
-            display: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: white;
-            position: absolute;
-            right: 20px;
-            top: 15px;
-            z-index: 3;
-        }
+    /* NAVBAR */
+    .navbar {
+      background-color: rgba(26, 188, 156, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 15px 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      animation: navbarSlide 1s ease-out;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 80px;
-        }
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+      position: relative;
+      transition: all 0.3s ease;
+    }
 
-        .nav-links a {
-            color: black;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            position: relative;
-            transition: all 0.3s ease;
-        }
+    .navbar a:hover {
+      color: white;
+      transform: scale(1.05);
+    }
 
-        .nav-links a:hover {
-            color: white;
-            transform: scale(1.05);
-        }
+    .navbar a::before {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 0%;
+      height: 4px;
+      bottom: -5px;
+      left: 0;
+      background: white;
+      border-radius: 4px;
+      transition: width 0.4s ease-in-out;
+    }
 
-        .nav-links a::before {
-            content: "";
-            position: absolute;
-            display: block;
-            width: 0%;
-            height: 4px;
-            bottom: -5px;
-            left: 0;
-            background: white;
-            border-radius: 4px;
-            transition: width 0.4s ease-in-out;
-        }
+    .navbar a:hover::before {
+      width: 100%;
+    }
 
-        .nav-links a:hover::before {
-            width: 100%;
-        }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
 
-        .container {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-            margin-top: 100px;
-            animation: fadeIn 2s ease-out;
-            height: 450px;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-        }
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: black;
+      margin: 4px 0;
+      transition: all 0.3s;
+    }
 
-        h2 {
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 1.8rem;
-        }
+    .navbar-links {
+      display: flex;
+      gap: 40px;
+    }
 
-        select,
-        input {
-            padding: 12px;
-            border: 2px solid #dcdfe3;
-            border-radius: 8px;
-            width: 90%;
-            font-size: 1rem;
-            background-color: #f9fafb;
-            margin-bottom: 10px;
-        }
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 15px;
+      }
 
-        .btn {
-            margin-top: 30px;
-            background-color: #1abc9c;
-            color: white;
-            padding: 14px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: background-color 0.3s, transform 0.3s;
-        }
+      .menu-toggle {
+        display: flex;
+      }
 
-        .btn:hover {
-            background-color: #16a085;
-            transform: scale(1.05);
-        }
+      .navbar-links {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        flex-direction: column;
+        background-color: rgba(26, 188, 156, 0.95);
+        width: 100%;
+        padding: 20px 0;
+        z-index: 998;
+      }
 
-        .output {
-            margin-top: 20px;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 1rem;
-        }
+      .navbar-links.active {
+        display: flex;
+      }
 
-        @keyframes navbarSlide {
-            from {
-                transform: translateY(-100%);
-            }
+      .navbar a {
+        font-size: 16px;
+        padding: 10px;
+        text-align: center;
+      }
+    }
 
-            to {
-                transform: translateY(0);
-            }
-        }
+    /* CONTAINER */
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      margin-top: 100px;
+      animation: fadeIn 2s ease-out;
+      min-height: 300px;
+      height: auto;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+    h2 {
+      font-weight: 700;
+      color: #2c3e50;
+      font-size: 1.8rem;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    select,
+    input {
+      padding: 12px;
+      border: 2px solid #dcdfe3;
+      border-radius: 8px;
+      width: 90%;
+      font-size: 16px;
+      background-color: #f9fafb;
+      margin-bottom: 10px;
+    }
 
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                background-color: rgba(26, 188, 156, 0.95);
-                position: absolute;
-                top: 60px;
-                right: 20px;
-                padding: 20px;
-                border-radius: 10px;
-                width: 200px;
-                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-            }
+    .btn {
+      margin-top: 30px;
+      background-color: #1abc9c;
+      color: white;
+      padding: 14px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      transition: background-color 0.3s, transform 0.3s;
+    }
 
-            .nav-links.active {
-                display: flex;
-            }
+    .btn:hover {
+      background-color: #16a085;
+      transform: scale(1.05);
+    }
 
-            .hamburger {
-                display: block;
-            }
+    .output {
+      margin-top: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
 
-            .navbar {
-                justify-content: flex-start;
-                padding-right: 60px;
-            }
+    @keyframes navbarSlide {
+      from {
+        transform: translateY(-100%);
+      }
 
-            .container {
-                width: 95%;
-                padding: 20px;
-                margin-top: 90px;
-            }
+      to {
+        transform: translateY(0);
+      }
+    }
 
-            h2 {
-                font-size: 1.4rem;
-            }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
 
-            select,
-            input,
-            .btn {
-                font-size: 1rem;
-                width: 100%;
-            }
-
-            .output {
-                font-size: 0.95rem;
-            }
-        }
-    </style>
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="navbar">
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
-        <div class="nav-links" id="navLinks">
-            <a href="index.html">&#8592; Back to Home</a>
-            <a href="updated_health_calc.html">BMI Calculator</a>
-            <a href="foodCalculator.html">Food Calculator</a>
-            <a href="mealCalculator.html">Meal Calculator</a>
-        </div>
+  <div class="navbar">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-
-    <div class="container">
-        <h2>Food Nutrition Checker</h2>
-
-        <select id="foodSelect">
-            <!-- Food options will be loaded here -->
-        </select>
-
-        <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
-
-        <button class="btn" onclick="lookupFood()">Check Nutrition</button>
-
-        <div class="output" id="foodOutput"></div>
+    <div class="navbar-links" id="navbarLinks">
+      <a href="index.html">&#8592; Back to Home</a>
+      <a href="updated_health_calc.html">BMI Calculator</a>
+      <a href="foodCalculator.html">Food Calculator</a>
+      <a href="mealCalculator.html">Meal Calculator</a>
     </div>
+  </div>
 
-    <script>
-        let foodData = [];
+  <div class="container">
+    <h2>Food Nutrition Checker</h2>
+    <select id="foodSelect">
+      <!-- Food options will be loaded here -->
+    </select>
 
-        async function fetchFoodData() {
-            try {
-                const response = await fetch('foodDatabase.json');
-                foodData = await response.json();
-                populateFoodSelect();
-            } catch (err) {
-                console.error('Error loading food data', err);
-            }
-        }
+    <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1" />
 
-        function populateFoodSelect() {
-            const foodSelect = document.getElementById('foodSelect');
-            if (foodData.length === 0) {
-                foodSelect.innerHTML = '<option>No food items found</option>';
-                return;
-            }
+    <button class="btn" onclick="lookupFood()">Check Nutrition</button>
 
-            foodData.forEach(food => {
-                const option = document.createElement('option');
-                option.value = food.name;
-                option.textContent = food.name;
-                foodSelect.appendChild(option);
-            });
-        }
+    <div class="output" id="foodOutput"></div>
+  </div>
 
-        function lookupFood() {
-            const foodName = document.getElementById('foodSelect').value.toLowerCase().trim();
-            const servings = parseFloat(document.getElementById('servingInput').value.trim()) || 1;
-            const totalGrams = servings * 100;
-            const output = document.getElementById('foodOutput');
+  <script>
+    let foodData = [];
 
-            const found = foodData.find(item => item.name.toLowerCase() === foodName);
+    async function fetchFoodData() {
+      try {
+        const response = await fetch('foodDatabase.json');
+        foodData = await response.json();
+        populateFoodSelect();
+      } catch (err) {
+        console.error('Error loading food data', err);
+      }
+    }
 
-            if (found) {
-                const factor = totalGrams / 100;
-                output.innerHTML = `
-                    <p><strong>${found.name}</strong></p>
-                    <p>For <strong>${servings}</strong> serving(s) = <strong>${totalGrams}g</strong>:</p>
-                    <p>
-                        Calories: ${(found.calories * factor).toFixed(2)} kcal<br>
-                        Carbs: ${(found.carbs * factor).toFixed(2)} g<br>
-                        Protein: ${(found.protein * factor).toFixed(2)} g<br>
-                        Fat: ${(found.fat * factor).toFixed(2)} g
-                    </p>
-                `;
-            } else {
-                output.innerHTML = "<p>Food item not found in the database. Please try another.</p>";
-            }
-        }
+    function populateFoodSelect() {
+      const foodSelect = document.getElementById('foodSelect');
+      if (foodData.length === 0) {
+        foodSelect.innerHTML = '<option>No food items found</option>';
+        return;
+      }
 
-        function toggleMenu() {
-            const nav = document.getElementById('navLinks');
-            nav.classList.toggle('active');
-        }
+      foodData.forEach(food => {
+        const option = document.createElement('option');
+        option.value = food.name;
+        option.textContent = food.name;
+        foodSelect.appendChild(option);
+      });
+    }
 
-        window.onload = fetchFoodData;
-    </script>
+    function lookupFood() {
+      const foodName = document.getElementById('foodSelect').value.toLowerCase().trim();
+      const servings = parseFloat(document.getElementById('servingInput').value.trim()) || 1;
+      const totalGrams = servings * 100;
+      const output = document.getElementById('foodOutput');
+
+      const found = foodData.find(item => item.name.toLowerCase() === foodName);
+
+      if (found) {
+        const factor = totalGrams / 100;
+        output.innerHTML = `
+          <p><strong>${found.name}</strong></p>
+          <p>For <strong>${servings}</strong> serving(s) = <strong>${totalGrams}g</strong>:</p>
+          <p>
+              Calories: ${(found.calories * factor).toFixed(2)} kcal<br>
+              Carbs: ${(found.carbs * factor).toFixed(2)} g<br>
+              Protein: ${(found.protein * factor).toFixed(2)} g<br>
+              Fat: ${(found.fat * factor).toFixed(2)} g
+          </p>
+        `;
+      } else {
+        output.innerHTML = "<p>Food item not found in the database. Please try another.</p>";
+      }
+    }
+
+    function toggleMenu() {
+      document.getElementById('navbarLinks').classList.toggle('active');
+    }
+
+    window.onload = fetchFoodData;
+  </script>
 </body>
 
 </html>
