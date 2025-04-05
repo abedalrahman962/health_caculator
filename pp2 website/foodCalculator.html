@@ -47,7 +47,23 @@
             z-index: 2;
         }
 
-        .navbar a {
+        .hamburger {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            z-index: 3;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 80px;
+        }
+
+        .nav-links a {
             color: black;
             text-decoration: none;
             font-size: 18px;
@@ -56,12 +72,12 @@
             transition: all 0.3s ease;
         }
 
-        .navbar a:hover {
+        .nav-links a:hover {
             color: white;
             transform: scale(1.05);
         }
 
-        .navbar a::before {
+        .nav-links a::before {
             content: "";
             position: absolute;
             display: block;
@@ -74,7 +90,7 @@
             transition: width 0.4s ease-in-out;
         }
 
-        .navbar a:hover::before {
+        .nav-links a:hover::before {
             width: 100%;
         }
 
@@ -97,6 +113,7 @@
         h2 {
             font-weight: 700;
             color: #2c3e50;
+            font-size: 1.8rem;
         }
 
         select,
@@ -105,7 +122,7 @@
             border: 2px solid #dcdfe3;
             border-radius: 8px;
             width: 90%;
-            font-size: 16px;
+            font-size: 1rem;
             background-color: #f9fafb;
             margin-bottom: 10px;
         }
@@ -119,7 +136,7 @@
             cursor: pointer;
             width: 100%;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 1.1rem;
             font-weight: 700;
             transition: background-color 0.3s, transform 0.3s;
         }
@@ -133,6 +150,7 @@
             margin-top: 20px;
             font-weight: 600;
             color: #2c3e50;
+            font-size: 1rem;
         }
 
         @keyframes navbarSlide {
@@ -156,15 +174,67 @@
                 transform: translateY(0);
             }
         }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background-color: rgba(26, 188, 156, 0.95);
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                padding: 20px;
+                border-radius: 10px;
+                width: 200px;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .navbar {
+                justify-content: flex-start;
+                padding-right: 60px;
+            }
+
+            .container {
+                width: 95%;
+                padding: 20px;
+                margin-top: 90px;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            select,
+            input,
+            .btn {
+                font-size: 1rem;
+                width: 100%;
+            }
+
+            .output {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="navbar">
-        <a href="index.html">&#8592; Back to Home</a>
-        <a href="updated_health_calc.html">BMI Calculator</a>
-        <a href="foodCalculator.html">Food Calculator</a>
-        <a href="mealCalculator.html">Meal Calculator</a>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">&#8592; Back to Home</a>
+            <a href="updated_health_calc.html">BMI Calculator</a>
+            <a href="foodCalculator.html">Food Calculator</a>
+            <a href="mealCalculator.html">Meal Calculator</a>
+        </div>
     </div>
 
     <div class="container">
@@ -232,6 +302,11 @@
             } else {
                 output.innerHTML = "<p>Food item not found in the database. Please try another.</p>";
             }
+        }
+
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('active');
         }
 
         window.onload = fetchFoodData;
