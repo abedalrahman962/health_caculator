@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meal Planner</title>
+    <title>Meal Nutrition Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         html, body {
@@ -13,7 +12,7 @@
             font-family: 'Inter', sans-serif;
             height: 100%;
             overflow-x: hidden;
-            overflow-y: auto;  /* Enables vertical scrolling */
+            overflow-y: auto;
         }
 
         body {
@@ -164,15 +163,6 @@
         <a href="homePage.html">&#8592; Back to Home</a>
         <a href="updated_health_calc.html">BMI Calculator</a>
         <a href="foodCalculator.html">Food Calculator</a>
-        <a href="mealCalculator.html">Meal Calculator</a>
-    </div>
-
-    <!-- Meal Plan Generator -->
-    <div class="container">
-        <h2>Meal Planner</h2>
-        <input type="number" id="calories" placeholder="Enter your daily calorie goal">
-        <button class="btn" onclick="generateMealPlan()">Generate Meal Plan</button>
-        <div class="output" id="mealOutput"></div>
     </div>
 
     <!-- Specific Meal Nutrition -->
@@ -189,7 +179,7 @@
     </div>
 
     <script>
-        let meals = {};  // Store meal data here
+        let meals = [];  // Store meal data here
 
         // Fetch the meal data from the JSON file using async/await
         async function loadMeals() {
@@ -197,6 +187,7 @@
                 const response = await fetch('mealDatabase.json');
                 if (!response.ok) throw new Error('Network response was not ok');
                 meals = await response.json();
+                console.log(meals); // Log the meals to see if they are loaded properly
                 populateMealSelect();  // Populate the meal select dropdown
             } catch (error) {
                 console.error("Error loading the meal database: ", error);
@@ -206,54 +197,20 @@
         // Populating meal select dropdown
         function populateMealSelect() {
             const mealSelect = document.getElementById('mealSelect');
-            for (const meal in meals) {
-                const option = document.createElement('option');
-                option.value = meal;
-                option.textContent = meal;
-                mealSelect.appendChild(option);
+            if (meals.length === 0) {
+                mealSelect.innerHTML = '<option>No meals available</option>';
+                return;
             }
+            meals.forEach(meal => {
+                const option = document.createElement('option');
+                option.value = meal.name;
+                option.textContent = meal.name;
+                mealSelect.appendChild(option);
+            });
         }
 
         // Call loadMeals when the page loads
         window.onload = loadMeals;
-
-        function generateMealPlan() {
-            const goal = parseInt(document.getElementById('calories').value);
-            const output = document.getElementById('mealOutput');
-            if (isNaN(goal) || goal < 200) {
-                output.innerHTML = '<p>Please enter a valid calorie goal (min. 200).</p>';
-                return;
-            }
-
-            let plan = [];
-            let total = 0;
-            let mealKeys = Object.keys(meals).sort(() => 0.5 - Math.random());  // Randomize meal order
-
-            for (let meal of mealKeys) {
-                if (total + meals[meal].calories <= goal) {
-                    plan.push(meal);
-                    total += meals[meal].calories;
-                }
-            }
-
-            if (plan.length === 0) {
-                output.innerHTML = '<p>No suitable meals found for this calorie goal.</p>';
-            } else {
-                let totalCarbs = 0, totalProtein = 0, totalFat = 0;
-                for (let meal of plan) {
-                    totalCarbs += meals[meal].carbs;
-                    totalProtein += meals[meal].protein;
-                    totalFat += meals[meal].fat;
-                }
-
-                output.innerHTML = `
-                    <p><strong>Suggested Meals:</strong></p>
-                    <ul>${plan.map(m => `<li>${m} - ${meals[m].calories} kcal</li>`).join('')}</ul>
-                    <p><strong>Total:</strong> ${total} kcal<br>
-                    Carbs: ${totalCarbs} g | Protein: ${totalProtein} g | Fat: ${totalFat} g</p>
-                `;
-            }
-        }
 
         function calculateMealNutrition() {
             const selectedMeal = document.getElementById('mealSelect').value;
@@ -265,7 +222,7 @@
                 return;
             }
 
-            const meal = meals[selectedMeal];
+            const meal = meals.find(m => m.name === selectedMeal);
             const totalCalories = meal.calories * servings / 100;
             const totalCarbs = meal.carbs * servings / 100;
             const totalProtein = meal.protein * servings / 100;
@@ -281,5 +238,4 @@
         }
     </script>
 </body>
-
 </html>
