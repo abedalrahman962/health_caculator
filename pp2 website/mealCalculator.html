@@ -3,85 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meal Calculator</title>
+    <title>Meal Nutrition Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #2c3e50, #3498db);
-            color: white;
+        html, body {
             margin: 0;
             padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
+
+        body {
+            background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
         .navbar {
+            background-color: rgba(26, 188, 156, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 15px 20px;
+            width: 100%;
             display: flex;
             justify-content: center;
-            gap: 40px;
-            background-color: rgba(26, 188, 156, 0.75);
-            padding: 15px;
-            flex-wrap: wrap;
+            gap: 80px;
+            animation: navbarSlide 1s ease-out;
+            position: relative;
         }
+
         .navbar a {
-            color: white;
+            color: black;
             text-decoration: none;
-            font-weight: bold;
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
         }
-        .container {
-            max-width: 600px;
-            width: 90%;
-            margin: 30px auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        select, input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            border-radius: 10px;
-            border: none;
-            background: #ecf0f1;
-            color: #2c3e50;
-            font-size: 1rem;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 25px;
-            border: none;
-            border-radius: 10px;
-            background-color: #e67e22;
+
+        .navbar a:hover {
             color: white;
-            font-weight: bold;
-            font-size: 1rem;
+            transform: scale(1.05);
+        }
+
+        .navbar a::before {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 0%;
+            height: 4px;
+            bottom: -5px;
+            left: 0;
+            background: white;
+            border-radius: 4px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        .navbar a:hover::before {
+            width: 100%;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 40px;
+            animation: fadeIn 2s ease-out;
+            margin-bottom: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        h2 {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        select,
+        input {
+            padding: 12px;
+            border: 2px solid #dcdfe3;
+            border-radius: 8px;
+            width: 80%;
+            font-size: 16px;
+            background-color: #f9fafb;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #1abc9c;
+            color: white;
+            padding: 14px;
+            border: none;
             cursor: pointer;
-            transition: background 0.3s;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            transition: background-color 0.3s, transform 0.3s;
         }
-        button:hover {
-            background-color: #d35400;
+
+        .btn:hover {
+            background-color: #16a085;
+            transform: scale(1.05);
         }
-        #mealOutput {
-            margin-top: 25px;
-            line-height: 1.6;
+
+        .output {
+            margin-top: 20px;
+            font-weight: 600;
+            color: #2c3e50;
         }
-        @media (max-width: 600px) {
-            .navbar {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
+
+        @keyframes navbarSlide {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
 </head>
+
 <body>
     <div class="navbar">
         <a href="index.html">&#8592; Back to Home</a>
@@ -89,53 +165,75 @@
         <a href="foodCalculator.html">Food Calculator</a>
         <a href="mealCalculator.html">Meal Calculator</a>
     </div>
+
+    <!-- Specific Meal Nutrition -->
     <div class="container">
-        <h1>Meal Nutrition Calculator</h1>
-        <label for="meal">Select a Meal:</label>
-        <select id="meal">
-            <option value="">-- Choose a Meal --</option>
+        <h2>Specific Meal Nutrition</h2>
+        <select id="mealSelect">
+            <!-- Meals will be populated dynamically from JSON -->
         </select>
-        <label for="servings">Servings (100g each):</label>
-        <input type="number" id="servings" placeholder="e.g. 2">
-        <button onclick="calculateMealNutrition()">Calculate Nutrition</button>
-        <div id="mealOutput"></div>
+
+        <input type="number" id="servings" placeholder="Enter number of servings (100g each)">
+        <button class="btn" onclick="calculateMealNutrition()">Calculate Meal Nutrition</button>
+        <div class="output" id="specificMealOutput"></div>
     </div>
+
     <script>
-        let meals = [];
-        fetch('mealDatabase.json')
-            .then(response => response.json())
-            .then(data => {
-                meals = data;
-                const mealSelect = document.getElementById("meal");
-                meals.forEach(meal => {
-                    const option = document.createElement("option");
-                    option.value = meal.name;
-                    option.textContent = meal.name;
-                    mealSelect.appendChild(option);
-                });
+        let meals = [];  // Store meal data here
+
+        // Fetch the meal data from the JSON file using async/await
+        async function loadMeals() {
+            try {
+                const response = await fetch('mealDatabase.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                meals = await response.json();
+                console.log(meals); // Log the meals to see if they are loaded properly
+                populateMealSelect();  // Populate the meal select dropdown
+            } catch (error) {
+                console.error("Error loading the meal database: ", error);
+            }
+        }
+
+        // Populating meal select dropdown
+        function populateMealSelect() {
+            const mealSelect = document.getElementById('mealSelect');
+            if (meals.length === 0) {
+                mealSelect.innerHTML = '<option>No meals available</option>';
+                return;
+            }
+            meals.forEach(meal => {
+                const option = document.createElement('option');
+                option.value = meal.name;
+                option.textContent = meal.name;
+                mealSelect.appendChild(option);
             });
+        }
+
+        // Call loadMeals when the page loads
+        window.onload = loadMeals;
 
         function calculateMealNutrition() {
-            const selectedMeal = document.getElementById("meal").value;
-            const servings = parseFloat(document.getElementById("servings").value);
-            const output = document.getElementById("mealOutput");
-            const meal = meals.find(m => m.name === selectedMeal);
+            const selectedMeal = document.getElementById('mealSelect').value;
+            const servings = parseInt(document.getElementById('servings').value);
+            const output = document.getElementById('specificMealOutput');
 
-            if (!meal || isNaN(servings) || servings <= 0) {
-                output.innerHTML = "<p style='color: #ffb3b3;'>Please select a valid meal and enter a number of servings.</p>";
+            if (isNaN(servings) || servings <= 0) {
+                output.innerHTML = '<p>Please enter a valid number of servings (greater than 0).</p>';
                 return;
             }
 
-            const totalCalories = meal.calories * servings;
-            const totalProtein = meal.protein * servings;
-            const totalCarbs = meal.carbs * servings;
-            const totalFats = meal.fats * servings;
+            const meal = meals.find(m => m.name === selectedMeal);
+            const totalCalories = meal.calories * servings / 100;
+            const totalCarbs = meal.carbs * servings / 100;
+            const totalProtein = meal.protein * servings / 100;
+            const totalFat = meal.fat * servings / 100;
 
             output.innerHTML = `
-                <p><strong>Total Calories:</strong> ${totalCalories.toFixed(1)} kcal</p>
-                <p><strong>Total Protein:</strong> ${totalProtein.toFixed(1)} g</p>
-                <p><strong>Total Carbs:</strong> ${totalCarbs.toFixed(1)} g</p>
-                <p><strong>Total Fats:</strong> ${totalFats.toFixed(1)} g</p>
+                <p><strong>${selectedMeal}</strong><br>
+                Calories: ${totalCalories.toFixed(2)} kcal<br>
+                Carbs: ${totalCarbs.toFixed(2)} g<br>
+                Protein: ${totalProtein.toFixed(2)} g<br>
+                Fat: ${totalFat.toFixed(2)} g</p>
             `;
         }
     </script>
