@@ -99,6 +99,7 @@
             color: #2c3e50;
         }
 
+        select,
         input {
             padding: 12px;
             border: 2px solid #dcdfe3;
@@ -107,7 +108,6 @@
             font-size: 16px;
             background-color: #f9fafb;
             margin-bottom: 10px;
-            position: relative;
         }
 
         .btn {
@@ -133,30 +133,6 @@
             margin-top: 20px;
             font-weight: 600;
             color: #2c3e50;
-        }
-
-        .autocomplete-suggestions {
-            max-height: 200px;
-            overflow-y: auto;
-            background: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            position: absolute;
-            width: 88%;
-            box-sizing: border-box;
-            z-index: 2;
-            display: none;
-        }
-
-        .autocomplete-suggestions div {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #f9fafb;
-            transition: background-color 0.2s ease;
-        }
-
-        .autocomplete-suggestions div:hover {
-            background-color: #e1e1e1;
         }
 
         @keyframes navbarSlide {
@@ -191,24 +167,19 @@
         <a href="mealCalculator.html">Meal Calculator</a>
     </div>
 
-  <div class="container">
-    <h2>Food Nutrition Checker</h2>
-    
-    <!-- Food dropdown -->
-    <select id="foodSelect">
-        <!-- Options will be populated dynamically -->
-    </select>
+    <div class="container">
+        <h2>Food Nutrition Checker</h2>
 
-    <!-- Serving input -->
-    <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
+        <select id="foodSelect">
+            <!-- Food options will be loaded here -->
+        </select>
 
-    <!-- Button -->
-    <button class="btn" onclick="lookupFood()">Check Nutrition</button>
+        <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
 
-    <!-- Output -->
-    <div class="output" id="foodOutput"></div>
-</div>
+        <button class="btn" onclick="lookupFood()">Check Nutrition</button>
 
+        <div class="output" id="foodOutput"></div>
+    </div>
 
     <script>
         let foodData = [];
@@ -217,44 +188,32 @@
             try {
                 const response = await fetch('foodDatabase.json');
                 foodData = await response.json();
+                populateFoodSelect();
             } catch (err) {
                 console.error('Error loading food data', err);
             }
         }
 
-        function displaySuggestions(data) {
-            const suggestionsList = document.getElementById('suggestionsList');
-            suggestionsList.innerHTML = '';
+        function populateFoodSelect() {
+            const foodSelect = document.getElementById('foodSelect');
+            if (foodData.length === 0) {
+                foodSelect.innerHTML = '<option>No food items found</option>';
+                return;
+            }
 
-            data.forEach(item => {
-                const suggestionItem = document.createElement('div');
-                suggestionItem.textContent = item.name;
-                suggestionItem.onclick = () => selectFood(item.name);
-                suggestionsList.appendChild(suggestionItem);
+            foodData.forEach(food => {
+                const option = document.createElement('option');
+                option.value = food.name;
+                option.textContent = food.name;
+                foodSelect.appendChild(option);
             });
-
-            suggestionsList.style.display = 'block';
         }
 
-        function showSuggestions() {
-            displaySuggestions(foodData);
-        }
-
-        function selectFood(foodName) {
-            document.getElementById('foodInput').value = foodName;
-            document.getElementById('suggestionsList').style.display = 'none';
-        }
-
-        async function lookupFood() {
-            const foodName = document.getElementById('foodInput').value.toLowerCase().trim();
+        function lookupFood() {
+            const foodName = document.getElementById('foodSelect').value.toLowerCase().trim();
             const servings = parseFloat(document.getElementById('servingInput').value.trim()) || 1;
             const totalGrams = servings * 100;
             const output = document.getElementById('foodOutput');
-
-            if (!foodName) {
-                output.innerHTML = "<p>Please select a food item.</p>";
-                return;
-            }
 
             const found = foodData.find(item => item.name.toLowerCase() === foodName);
 
@@ -274,14 +233,6 @@
                 output.innerHTML = "<p>Food item not found in the database. Please try another.</p>";
             }
         }
-
-        document.addEventListener('click', function (e) {
-            const suggestionsList = document.getElementById('suggestionsList');
-            const foodInput = document.getElementById('foodInput');
-            if (!foodInput.contains(e.target) && !suggestionsList.contains(e.target)) {
-                suggestionsList.style.display = 'none';
-            }
-        });
 
         window.onload = fetchFoodData;
     </script>
