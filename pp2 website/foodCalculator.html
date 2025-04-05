@@ -191,14 +191,24 @@
         <a href="mealCalculator.html">Meal Calculator</a>
     </div>
 
-    <div class="container">
-        <h2>Food Nutrition Checker</h2>
-        <input type="text" id="foodInput" placeholder="Select food" readonly onclick="showSuggestions()" autocomplete="off">
-        <div class="autocomplete-suggestions" id="suggestionsList"></div>
-        <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
-        <button class="btn" onclick="lookupFood()">Check Nutrition</button>
-        <div class="output" id="foodOutput"></div>
-    </div>
+  <div class="container">
+    <h2>Food Nutrition Checker</h2>
+    
+    <!-- Food dropdown -->
+    <select id="foodSelect">
+        <!-- Options will be populated dynamically -->
+    </select>
+
+    <!-- Serving input -->
+    <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
+
+    <!-- Button -->
+    <button class="btn" onclick="lookupFood()">Check Nutrition</button>
+
+    <!-- Output -->
+    <div class="output" id="foodOutput"></div>
+</div>
+
 
     <script>
         let foodData = [];
