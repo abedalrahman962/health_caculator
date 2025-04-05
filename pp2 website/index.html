@@ -163,28 +163,29 @@
             }
         }
 
-        .created-by,
-        .presented-to {
-            position: absolute;
-            padding: 10px 15px;
-            font-size: 14px;
-            background: rgba(0, 0, 0, 0.4);
-            color: #ffffff;
-            font-weight: 400;
-            border-radius: 5px;
-            z-index: 1000;
-            text-align: center;
-        }
+       .created-by,
+.presented-to {
+    position: fixed;  /* Use fixed position to keep them in place */
+    padding: 10px 15px;
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    font-weight: 400;
+    border-radius: 5px;
+    z-index: 1000;
+    text-align: center;
+}
 
-        .created-by {
-            bottom: 5px;
-            left: 10px;
-        }
+.created-by {
+    bottom: 20px;  /* Adjust the distance from the bottom */
+    left: 20px;    /* Position it on the left side */
+}
 
-        .presented-to {
-            bottom: 5px;
-            right: 10px;
-        }
+.presented-to {
+    bottom: 20px;  /* Adjust the distance from the bottom */
+    right: 20px;   /* Position it on the right side */
+}
+
     </style>
 </head>
 
