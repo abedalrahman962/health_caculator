@@ -88,7 +88,7 @@
             text-align: center;
             margin-top: 100px;
             animation: fadeIn 2s ease-out;
-            height: 700px;
+            height: 600px;
             overflow-y: auto;
             position: relative;
             z-index: 1;
@@ -110,18 +110,8 @@
             position: relative;
         }
 
-        #gramInput {
-            padding: 12px;
-            border: 2px solid #dcdfe3;
-            border-radius: 8px;
-            width: 90%;
-            font-size: 16px;
-            background-color: #f9fafb;
-            margin-bottom: 20px;
-        }
-
         .btn {
-            margin-top: 50px;
+            margin-top: 30px;
             background-color: #1abc9c;
             color: white;
             padding: 14px;
@@ -205,8 +195,8 @@
         <h2>Food Nutrition Checker</h2>
         <input type="text" id="foodInput" placeholder="Enter food name (e.g., Apple)" oninput="filterFoodList()" autocomplete="off">
         <div class="autocomplete-suggestions" id="suggestionsList"></div>
-        <p><em>One serving = 100g</em></p>
-        <input type="number" id="gramInput" placeholder="Enter serving size in grams (e.g., 150)" min="1">
+        <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
+        <p><em>1 serving = 100g</em></p>
         <button class="btn" onclick="lookupFood()">Check Nutrition</button>
         <div class="output" id="foodOutput"></div>
     </div>
@@ -214,18 +204,16 @@
     <script>
         let foodData = [];
 
-        // Fetching food data from the server or JSON file
         async function fetchFoodData() {
             try {
                 const response = await fetch('foodDatabase.json');
                 foodData = await response.json();
-                displaySuggestions(foodData); // Show all foods initially
+                displaySuggestions(foodData);
             } catch (err) {
                 console.error('Error loading food data', err);
             }
         }
 
-        // Display food items in a scrollable list
         function displaySuggestions(data) {
             const suggestionsList = document.getElementById('suggestionsList');
             suggestionsList.innerHTML = '';
@@ -237,35 +225,33 @@
                 suggestionsList.appendChild(suggestionItem);
             });
 
-            suggestionsList.style.display = 'block'; // Show suggestions by default
+            suggestionsList.style.display = 'block';
         }
 
-        // Filter the food data based on input
         function filterFoodList() {
             const foodInput = document.getElementById('foodInput').value.toLowerCase().trim();
             const filteredData = foodData.filter(item => item.name.toLowerCase().includes(foodInput));
             displaySuggestions(filteredData);
         }
 
-        // Select the food and display it in the input
         function selectFood(foodName) {
             document.getElementById('foodInput').value = foodName;
             document.getElementById('suggestionsList').style.display = 'none';
         }
 
-        // Lookup food and display nutrition facts
         async function lookupFood() {
             const foodName = document.getElementById('foodInput').value.toLowerCase().trim();
-            const gramValue = parseFloat(document.getElementById('gramInput').value.trim()) || 100;
+            const servings = parseFloat(document.getElementById('servingInput').value.trim()) || 1;
+            const totalGrams = servings * 100;
             const output = document.getElementById('foodOutput');
 
             const found = foodData.find(item => item.name.toLowerCase() === foodName);
 
             if (found) {
-                const factor = gramValue / 100;
+                const factor = totalGrams / 100;
                 output.innerHTML = `
                     <p><strong>${found.name}</strong></p>
-                    <p>For <strong>${gramValue}g</strong> serving:</p>
+                    <p>For <strong>${servings}</strong> serving(s) = <strong>${totalGrams}g</strong>:</p>
                     <p>
                         Calories: ${(found.calories * factor).toFixed(2)} kcal<br>
                         Carbs: ${(found.carbs * factor).toFixed(2)} g<br>
@@ -278,7 +264,6 @@
             }
         }
 
-        // Close suggestions if clicked outside
         document.addEventListener('click', function (e) {
             const suggestionsList = document.getElementById('suggestionsList');
             const foodInput = document.getElementById('foodInput');
@@ -287,7 +272,6 @@
             }
         });
 
-        // Fetch the food data when the page loads
         window.onload = fetchFoodData;
     </script>
 </body>
