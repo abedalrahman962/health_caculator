@@ -1,271 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meal Nutrition Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Nutrition Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100%;
+            overflow-x: hidden;
+        }
 
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: inherit;
-      filter: blur(8px);
-      z-index: -1;
-    }
+        body {
+            background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding-top: 60px;
+        }
 
-    .navbar {
-      background-color: rgba(26, 188, 156, 0.75);
-      backdrop-filter: blur(8px);
-      padding: 15px 20px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      gap: 80px;
-      flex-wrap: wrap;
-      animation: navbarSlide 1s ease-out;
-      position: relative;
-      text-align: center;
-    }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(8px);
+            z-index: -1;
+        }
 
-    .navbar a {
-      color: black;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: 600;
-      position: relative;
-      transition: all 0.3s ease;
-    }
+        /* NAVBAR */
+        .navbar {
+            background-color: rgba(26, 188, 156, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 15px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            animation: navbarSlide 1s ease-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
 
-    .navbar a:hover {
-      color: white;
-      transform: scale(1.05);
-    }
+        .navbar a {
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+        }
 
-    .navbar a::before {
-      content: "";
-      position: absolute;
-      display: block;
-      width: 0%;
-      height: 4px;
-      bottom: -5px;
-      left: 0;
-      background: white;
-      border-radius: 4px;
-      transition: width 0.4s ease-in-out;
-    }
+        .navbar a:hover {
+            color: white;
+            transform: scale(1.05);
+        }
 
-    .navbar a:hover::before {
-      width: 100%;
-    }
+        .navbar a::before {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 0%;
+            height: 4px;
+            bottom: -5px;
+            left: 0;
+            background: white;
+            border-radius: 4px;
+            transition: width 0.4s ease-in-out;
+        }
 
-    .container {
-      background: rgba(255, 255, 255, 0.85);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 600px;
-      text-align: center;
-      margin-top: 40px;
-      animation: fadeIn 2s ease-out;
-      margin-bottom: 20px;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
+        .navbar a:hover::before {
+            width: 100%;
+        }
 
-    h2 {
-      font-weight: 700;
-      color: #2c3e50;
-    }
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
 
-    select,
-    input {
-      padding: 12px;
-      border: 2px solid #dcdfe3;
-      border-radius: 8px;
-      width: 80%;
-      font-size: 16px;
-      background-color: #f9fafb;
-      margin-bottom: 20px;
-    }
+        .menu-toggle div {
+            width: 25px;
+            height: 3px;
+            background: black;
+            margin: 4px 0;
+            transition: all 0.3s;
+        }
 
-    .btn {
-      background-color: #1abc9c;
-      color: white;
-      padding: 14px;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 700;
-      transition: background-color 0.3s, transform 0.3s;
-    }
+        .navbar-links {
+            display: flex;
+            gap: 40px;
+        }
 
-    .btn:hover {
-      background-color: #16a085;
-      transform: scale(1.05);
-    }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px;
+            }
 
-    .output {
-      margin-top: 20px;
-      font-weight: 600;
-      color: #2c3e50;
-    }
+            .menu-toggle {
+                display: flex;
+            }
 
-    @keyframes navbarSlide {
-      from {
-        transform: translateY(-100%);
-      }
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                flex-direction: column;
+                background-color: rgba(26, 188, 156, 0.95);
+                width: 100%;
+                padding: 20px 0;
+                z-index: 998;
+            }
 
-      to {
-        transform: translateY(0);
-      }
-    }
+            .navbar-links.active {
+                display: flex;
+            }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
+            .navbar a {
+                font-size: 16px;
+                padding: 10px;
+                text-align: center;
+            }
+        }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        /* CONTAINER */
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 100px;
+            animation: fadeIn 2s ease-out;
+            min-height: 300px;
+            height: auto;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
 
-    /* RESPONSIVENESS */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 10px 0;
-      }
+        h2 {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
 
-      .navbar a {
-        font-size: 16px;
-      }
+        select,
+        input {
+            padding: 12px;
+            border: 2px solid #dcdfe3;
+            border-radius: 8px;
+            width: 90%;
+            font-size: 16px;
+            background-color: #f9fafb;
+            margin-bottom: 10px;
+        }
 
-      .container {
-        padding: 25px 20px;
-        margin: 20px 10px;
-        width: 90%;
-        max-height: none;
-      }
+        .btn {
+            margin-top: 30px;
+            background-color: #1abc9c;
+            color: white;
+            padding: 14px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
-      select,
-      input {
-        width: 100%;
-        font-size: 15px;
-      }
+        .btn:hover {
+            background-color: #16a085;
+            transform: scale(1.05);
+        }
 
-      .btn {
-        font-size: 16px;
-      }
+        .output {
+            margin-top: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
 
-      h2 {
-        font-size: 22px;
-      }
+        @keyframes navbarSlide {
+            from {
+                transform: translateY(-100%);
+            }
 
-      .output {
-        font-size: 15px;
-      }
-    }
-  </style>
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="navbar">
-    <a href="index.html">&#8592; Back to Home</a>
-    <a href="updated_health_calc.html">BMI Calculator</a>
-    <a href="foodCalculator.html">Food Calculator</a>
-    <a href="mealCalculator.html">Meal Calculator</a>
-  </div>
+    <div class="navbar">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="navbar-links" id="navbarLinks">
+            <a href="index.html">&#8592; Back to Home</a>
+            <a href="updated_health_calc.html">BMI Calculator</a>
+            <a href="foodCalculator.html">Food Calculator</a>
+            <a href="mealCalculator.html">Meal Calculator</a>
+        </div>
+    </div>
 
-  <div class="container">
-    <h2>Specific Meal Nutrition</h2>
-    <select id="mealSelect"></select>
-    <input type="number" id="servings" placeholder="Enter number of servings (100g each)">
-    <button class="btn" onclick="calculateMealNutrition()">Calculate Meal Nutrition</button>
-    <div class="output" id="specificMealOutput"></div>
-  </div>
+    <div class="container">
+        <h2>Meal Nutrition Calculator</h2>
+        <select id="mealSelect">
+            <!-- Meal options will be loaded here -->
+        </select>
 
-  <script>
-    let meals = [];
+        <input type="number" id="servingInput" placeholder="Enter number of servings (e.g., 1, 2.5)" min="0.1" step="0.1">
 
-    async function loadMeals() {
-      try {
-        const response = await fetch('mealDatabase.json');
-        if (!response.ok) throw new Error('Network response was not ok');
-        meals = await response.json();
-        populateMealSelect();
-      } catch (error) {
-        console.error("Error loading the meal database: ", error);
-      }
-    }
+        <button class="btn" onclick="lookupMeal()">Check Nutrition</button>
 
-    function populateMealSelect() {
-      const mealSelect = document.getElementById('mealSelect');
-      if (meals.length === 0) {
-        mealSelect.innerHTML = '<option>No meals available</option>';
-        return;
-      }
-      meals.forEach(meal => {
-        const option = document.createElement('option');
-        option.value = meal.name;
-        option.textContent = meal.name;
-        mealSelect.appendChild(option);
-      });
-    }
+        <div class="output" id="mealOutput"></div>
+    </div>
 
-    window.onload = loadMeals;
+    <script>
+        let mealData = [];
 
-    function calculateMealNutrition() {
-      const selectedMeal = document.getElementById('mealSelect').value;
-      const servings = parseInt(document.getElementById('servings').value);
-      const output = document.getElementById('specificMealOutput');
+        async function fetchMealData() {
+            try {
+                const response = await fetch('mealDatabase.json');
+                mealData = await response.json();
+                populateMealSelect();
+            } catch (err) {
+                console.error('Error loading meal data', err);
+            }
+        }
 
-      if (isNaN(servings) || servings <= 0) {
-        output.innerHTML = '<p>Please enter a valid number of servings (greater than 0).</p>';
-        return;
-      }
+        function populateMealSelect() {
+            const mealSelect = document.getElementById('mealSelect');
+            if (mealData.length === 0) {
+                mealSelect.innerHTML = '<option>No meals found</option>';
+                return;
+            }
 
-      const meal = meals.find(m => m.name === selectedMeal);
-      const totalCalories = meal.calories * servings / 100;
-      const totalCarbs = meal.carbs * servings / 100;
-      const totalProtein = meal.protein * servings / 100;
-      const totalFat = meal.fat * servings / 100;
+            mealData.forEach(meal => {
+                const option = document.createElement('option');
+                option.value = meal.name;
+                option.textContent = meal.name;
+                mealSelect.appendChild(option);
+            });
+        }
 
-      output.innerHTML = `
-        <p><strong>${selectedMeal}</strong><br>
-        Calories: ${totalCalories.toFixed(2)} kcal<br>
-        Carbs: ${totalCarbs.toFixed(2)} g<br>
-        Protein: ${totalProtein.toFixed(2)} g<br>
-        Fat: ${totalFat.toFixed(2)} g</p>
-      `;
-    }
-  </script>
+        function lookupMeal() {
+            const mealName = document.getElementById('mealSelect').value.toLowerCase().trim();
+            const servings = parseFloat(document.getElementById('servingInput').value.trim()) || 1;
+            const totalGrams = servings * 100;
+            const output = document.getElementById('mealOutput');
+
+            const found = mealData.find(item => item.name.toLowerCase() === mealName);
+
+            if (found) {
+                const factor = totalGrams / 100;
+                output.innerHTML = `
+                    <p><strong>${found.name}</strong></p>
+                    <p>For <strong>${servings}</strong> serving(s) = <strong>${totalGrams}g</strong>:</p>
+                    <p>
+                        Calories: ${(found.calories * factor).toFixed(2)} kcal<br>
+                        Carbs: ${(found.carbs * factor).toFixed(2)} g<br>
+                        Protein: ${(found.protein * factor).toFixed(2)} g<br>
+                        Fat: ${(found.fat * factor).toFixed(2)} g
+                    </p>
+                `;
+            } else {
+                output.innerHTML = "<p>Meal item not found in the database. Please try another.</p>";
+            }
+        }
+
+        function toggleMenu() {
+            document.getElementById('navbarLinks').classList.toggle('active');
+        }
+
+        window.onload = fetchMealData;
+    </script>
 </body>
 </html>
