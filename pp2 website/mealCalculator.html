@@ -162,4 +162,110 @@
       .navbar {
         flex-direction: column;
         gap: 15px;
-        padding: 10px
+        padding: 10px 0;
+      }
+
+      .navbar a {
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 25px 20px;
+        margin: 20px 10px;
+        width: 90%;
+        max-height: none;
+      }
+
+      select,
+      input {
+        width: 100%;
+        font-size: 15px;
+      }
+
+      .btn {
+        font-size: 16px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .output {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="index.html">&#8592; Back to Home</a>
+    <a href="updated_health_calc.html">BMI Calculator</a>
+    <a href="foodCalculator.html">Food Calculator</a>
+    <a href="mealCalculator.html">Meal Calculator</a>
+  </div>
+
+  <div class="container">
+    <h2>Specific Meal Nutrition</h2>
+    <select id="mealSelect"></select>
+    <input type="number" id="servings" placeholder="Enter number of servings (100g each)">
+    <button class="btn" onclick="calculateMealNutrition()">Calculate Meal Nutrition</button>
+    <div class="output" id="specificMealOutput"></div>
+  </div>
+
+  <script>
+    let meals = [];
+
+    async function loadMeals() {
+      try {
+        const response = await fetch('mealDatabase.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        meals = await response.json();
+        populateMealSelect();
+      } catch (error) {
+        console.error("Error loading the meal database: ", error);
+      }
+    }
+
+    function populateMealSelect() {
+      const mealSelect = document.getElementById('mealSelect');
+      if (meals.length === 0) {
+        mealSelect.innerHTML = '<option>No meals available</option>';
+        return;
+      }
+      meals.forEach(meal => {
+        const option = document.createElement('option');
+        option.value = meal.name;
+        option.textContent = meal.name;
+        mealSelect.appendChild(option);
+      });
+    }
+
+    window.onload = loadMeals;
+
+    function calculateMealNutrition() {
+      const selectedMeal = document.getElementById('mealSelect').value;
+      const servings = parseInt(document.getElementById('servings').value);
+      const output = document.getElementById('specificMealOutput');
+
+      if (isNaN(servings) || servings <= 0) {
+        output.innerHTML = '<p>Please enter a valid number of servings (greater than 0).</p>';
+        return;
+      }
+
+      const meal = meals.find(m => m.name === selectedMeal);
+      const totalCalories = meal.calories * servings / 100;
+      const totalCarbs = meal.carbs * servings / 100;
+      const totalProtein = meal.protein * servings / 100;
+      const totalFat = meal.fat * servings / 100;
+
+      output.innerHTML = `
+        <p><strong>${selectedMeal}</strong><br>
+        Calories: ${totalCalories.toFixed(2)} kcal<br>
+        Carbs: ${totalCarbs.toFixed(2)} g<br>
+        Protein: ${totalProtein.toFixed(2)} g<br>
+        Fat: ${totalFat.toFixed(2)} g</p>
+      `;
+    }
+  </script>
+</body>
+</html>
