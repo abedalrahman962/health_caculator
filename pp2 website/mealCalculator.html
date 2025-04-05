@@ -13,10 +13,11 @@
             font-family: 'Inter', sans-serif;
             height: 100%;
             overflow-x: hidden;
+            overflow-y: auto;  /* Enables vertical scrolling */
         }
 
         body {
-            background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
+            background: url('meal-background.jpg') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -179,11 +180,7 @@
         <h2>Specific Meal Nutrition</h2>
         <label for="mealSelect">Select a Meal:</label>
         <select id="mealSelect">
-            <option value="Oatmeal with berries">Oatmeal with berries</option>
-            <option value="Grilled chicken salad">Grilled chicken salad</option>
-            <option value="Veggie stir-fry with tofu">Veggie stir-fry with tofu</option>
-            <option value="Greek yogurt with nuts">Greek yogurt with nuts</option>
-            <option value="Brown rice and beans">Brown rice and beans</option>
+            <!-- Meals will be populated dynamically from JSON -->
         </select>
 
         <input type="number" id="servings" placeholder="Enter number of servings (100g each)">
@@ -192,13 +189,28 @@
     </div>
 
     <script>
-        const meals = {
-            "Oatmeal with berries": { calories: 350, carbs: 60, protein: 10, fat: 8 },
-            "Grilled chicken salad": { calories: 450, carbs: 10, protein: 30, fat: 20 },
-            "Veggie stir-fry with tofu": { calories: 500, carbs: 70, protein: 20, fat: 18 },
-            "Greek yogurt with nuts": { calories: 200, carbs: 25, protein: 12, fat: 8 },
-            "Brown rice and beans": { calories: 400, carbs: 75, protein: 12, fat: 5 }
-        };
+        let meals = {};  // Store meal data here
+
+        // Fetch the meal data from the JSON file
+        fetch('mealDatabase.json')
+            .then(response => response.json())
+            .then(data => {
+                meals = data;  // Assign the data to meals object
+                populateMealSelect();  // Populate the meal select dropdown
+            })
+            .catch(error => {
+                console.error("Error loading the meal database: ", error);
+            });
+
+        function populateMealSelect() {
+            const mealSelect = document.getElementById('mealSelect');
+            for (const meal in meals) {
+                const option = document.createElement('option');
+                option.value = meal;
+                option.textContent = meal;
+                mealSelect.appendChild(option);
+            }
+        }
 
         function generateMealPlan() {
             const goal = parseInt(document.getElementById('calories').value);
@@ -210,7 +222,9 @@
 
             let plan = [];
             let total = 0;
-            for (let meal in meals) {
+            let mealKeys = Object.keys(meals).sort(() => 0.5 - Math.random());  // Randomize meal order
+
+            for (let meal of mealKeys) {
                 if (total + meals[meal].calories <= goal) {
                     plan.push(meal);
                     total += meals[meal].calories;
@@ -220,7 +234,19 @@
             if (plan.length === 0) {
                 output.innerHTML = '<p>No suitable meals found for this calorie goal.</p>';
             } else {
-                output.innerHTML = `<p><strong>Suggested Meals:</strong></p><ul>${plan.map(m => `<li>${m} - ${meals[m].calories} kcal</li>`).join('')}</ul><p>Total: ${total} kcal</p>`;
+                let totalCarbs = 0, totalProtein = 0, totalFat = 0;
+                for (let meal of plan) {
+                    totalCarbs += meals[meal].carbs;
+                    totalProtein += meals[meal].protein;
+                    totalFat += meals[meal].fat;
+                }
+
+                output.innerHTML = `
+                    <p><strong>Suggested Meals:</strong></p>
+                    <ul>${plan.map(m => `<li>${m} - ${meals[m].calories} kcal</li>`).join('')}</ul>
+                    <p><strong>Total:</strong> ${total} kcal<br>
+                    Carbs: ${totalCarbs} g | Protein: ${totalProtein} g | Fat: ${totalFat} g</p>
+                `;
             }
         }
 
