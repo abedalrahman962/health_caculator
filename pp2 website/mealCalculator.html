@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,6 +196,7 @@
                 const response = await fetch('mealDatabase.json');
                 if (!response.ok) throw new Error('Network response was not ok');
                 meals = await response.json();
+                console.log(meals); // Log the meals to see if they are loaded properly
                 populateMealSelect();  // Populate the meal select dropdown
             } catch (error) {
                 console.error("Error loading the meal database: ", error);
@@ -206,6 +206,10 @@
         // Populating meal select dropdown
         function populateMealSelect() {
             const mealSelect = document.getElementById('mealSelect');
+            if (meals.length === 0) {
+                mealSelect.innerHTML = '<option>No meals available</option>';
+                return;
+            }
             meals.forEach(meal => {
                 const option = document.createElement('option');
                 option.value = meal.name;
@@ -282,5 +286,4 @@
         }
     </script>
 </body>
-
 </html>
