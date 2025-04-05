@@ -85,7 +85,7 @@
             padding: 20px 0;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 911px) {
             .navbar {
                 padding: 15px 10px;
                 justify-content: space-between;
@@ -109,66 +109,73 @@
                 padding: 10px;
                 text-align: center;
             }
+
+            .main-content h1 {
+                font-size: 2.5em;
+            }
+
+            .main-content p {
+                font-size: 1.5em;
+            }
+
+            .logo {
+                width: 120px;
+            }
+
+            .created-by,
+            .presented-to {
+                font-size: 10px;  /* Smaller text */
+                padding: 4px 8px;  /* Reduced padding */
+                bottom: 5px;       /* Reduced bottom spacing */
+            }
         }
 
-        .main-content {
-            text-align: center;
-            color: #1b5e20; /* Deep green text for harmony */
-            margin-top: 100px;
-            animation: fadeIn 1.5s ease-out;
-            position: relative;
+        @media (max-width: 550px) {
+            .navbar {
+                padding: 12px 8px;
+                justify-content: space-between;
+            }
+
+            .navbar a {
+                font-size: 16px;
+                padding: 8px;
+            }
+
+            .main-content h1 {
+                font-size: 2em;
+            }
+
+            .main-content p {
+                font-size: 1.2em;
+            }
+
+            .logo {
+                width: 100px;  /* Even smaller logo */
+            }
+
+            .created-by,
+            .presented-to {
+                font-size: 10px;  /* Further reduced font size */
+                padding: 3px 6px; /* Smaller padding */
+            }
         }
 
-        .main-content h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            animation: slideIn 1s ease-out;
-        }
-
-        .main-content p {
-            font-size: 1.8em;
-            font-weight: 300;
-            margin-top: 10px;
-            animation: slideIn 1.5s ease-out;
-        }
-
+        /* Ensure the logo and created/presented text are in fixed positions */
         .logo {
             position: absolute;
             top: 150%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 150px; /* Adjust logo size */
+            width: 150px;
             height: auto;
         }
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideIn {
-            0% {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        /* Updated styles for the created-by and presented-to sections */
+        /* Created by and Presented to, fixed at bottom corners */
         .created-by,
         .presented-to {
-            position: absolute;  /* Absolute positioning inside the body */
-            padding: 5px 10px;  /* Reduced padding */
-            font-size: 12px;  /* Smaller font size */
+            position: absolute;
+            padding: 5px 10px;
+            font-size: 12px;
             background: rgba(0, 0, 0, 0.4);
             color: #ffffff;
             font-weight: 400;
@@ -178,13 +185,13 @@
         }
 
         .created-by {
-            bottom: 10px;  /* Position 10px from the bottom */
-            left: 10px;    /* Position on the left */
+            bottom: 10px;
+            left: 10px;
         }
 
         .presented-to {
-            bottom: 10px;  /* Position 10px from the bottom */
-            right: 10px;   /* Position on the right */
+            bottom: 10px;
+            right: 10px;
         }
     </style>
 </head>
@@ -207,7 +214,6 @@
     <div class="main-content">
         <h1>Welcome to Health & Nutrition Tools</h1>
         <p>Select a tool to get started and take control of your health journey!</p>
-        <!-- Add your logo here -->
         <img src="images.jpeg" alt="University Logo" class="logo">
     </div>
 
