@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Credits - Health & Nutrition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('healthy-weight-scale.jpg') no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: rgba(26, 188, 156, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 15px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            animation: navbarSlide 1s ease-out;
+        }
+
+        .navbar-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes navbarSlide {
+            from {
+                top: -80px;
+                opacity: 0;
+            }
+            to {
+                top: 0;
+                opacity: 1;
+            }
+        }
+
+        /* CONTAINER */
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 120px;
+            animation: fadeIn 2s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .credit-section {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .credit-section h3 {
+            color: #1abc9c;
+            border-bottom: 2px solid #1abc9c;
+            padding-bottom: 5px;
+        }
+
+        .credit-section p {
+            margin: 8px 0;
+        }
+
+        .nutritionist-contact {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .nutritionist-info {
+            text-align: left;
+            margin: 10px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-links {
+                flex-direction: column;
+                align-items: center;
+                display: none;
+                width: 100%;
+                background-color: rgba(26, 188, 156, 0.95);
+                padding: 10px 0;
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+                flex-direction: column;
+                cursor: pointer;
+                margin-right: auto;
+            }
+
+            .menu-toggle div {
+                width: 25px;
+                height: 3px;
+                background-color: #000;
+                margin: 4px 0;
+                transition: 0.4s;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="navbar-links" id="navbarLinks">
+            <a href="index.html">&#8592; Back to Home</a>
+            <a href="updated_health_calc.html">BMI Calculator</a>
+            <a href="foodCalculator.html">Food Calculator</a>
+            <a href="mealCalculator.html">Meal Calculator</a>
+            <a href="credits.html">Credits</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Credits</h2>
+
+        <div class="credit-section">
+            <h3>Created By:</h3>
+            <p>Abedalrahman Alabedalhamid</p>
+            <p>Ahmad Terjman</p>
+            <p>Adam Jundi</p>
+            <p>Othman Abedalwahad</p>
+            <p>Ibrahim Solieman</p>
+            <p>Hamza Shawki</p>
+            <p>Rida Assaf</p>
+        </div>
+
+        <div class="credit-section">
+            <h3>Presented To:</h3>
+            <p>Dr. Chaza Alaeddine</p>
+        </div>
+
+        <div class="nutritionist-contact">
+            <h3>Nutritionist Contact</h3>
+            <div class="nutritionist-info">
+                <p><strong>Name:</strong> Bothaina Soleiman</p>
+               <p><strong>Phone:</strong>
+    <a href="https://wa.me/96170652202" target="_blank" style="color: #25D366; text-decoration: none;">
+        +96170652202 (Chat on WhatsApp)
+    </a>
+</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navbarLinks');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>
