@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,107 +41,99 @@
             z-index: -1;
         }
 
-        /* NAVBAR */
-        .navbar {
-            background-color: rgba(26, 188, 156, 0.75);
-            backdrop-filter: blur(8px);
-            padding: 15px 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 80px;
-            animation: navbarSlide 1s ease-out;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 999;
-        }
+ .navbar {
+    background-color: #1abc9c;
+    padding: 15px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Changed from space-between to center */
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
 
-        .navbar a {
-            color: black;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            position: relative;
-            transition: all 0.3s ease;
-        }
+.navbar-links {
+    display: flex;
+    gap: 15px;
+    justify-content: center; /* Ensure links are centered */
+    width: 100%; /* Take full width to help with centering */
+    max-width: 1200px; /* Optional: prevent links from spreading too wide */
+}
 
-        .navbar a:hover {
-            color: white;
-            transform: scale(1.05);
-        }
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin: 0 5px; /* Added margin for better spacing */
+}
 
-        .navbar a::before {
-            content: "";
-            position: absolute;
-            display: block;
-            width: 0%;
-            height: 4px;
-            bottom: -5px;
-            left: 0;
-            background: white;
-            border-radius: 4px;
-            transition: width 0.4s ease-in-out;
-        }
+/* Keep all other existing navbar styles the same */
+.navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.35); /* More visible on hover */
+    transform: translateY(-2px);
+}
 
-        .navbar a:hover::before {
-            width: 100%;
-        }
+/* Mobile menu styles remain the same */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+}
 
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
+.menu-toggle div {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 4px 0;
+    transition: all 0.3s;
+}
 
-        .menu-toggle div {
-            width: 25px;
-            height: 3px;
-            background: black;
-            margin: 4px 0;
-            transition: all 0.3s;
-        }
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 15px;
+    }
 
-        .navbar-links {
-            display: flex;
-            gap: 40px;
-        }
+    .navbar-links {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        flex-direction: column;
+        background-color: #1abc9c; /* Solid color for mobile */
+        width: 100%;
+        padding: 15px 0;
+        gap: 10px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
 
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: row;
-                justify-content: space-between;
-                padding: 15px;
-            }
+    .navbar-links.active {
+        display: flex;
+    }
 
-            .menu-toggle {
-                display: flex;
-            }
+    .menu-toggle {
+        display: flex;
+    }
 
-            .navbar-links {
-                display: none;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                flex-direction: column;
-                background-color: rgba(26, 188, 156, 0.95);
-                width: 100%;
-                padding: 20px 0;
-                z-index: 998;
-            }
-
-            .navbar-links.active {
-                display: flex;
-            }
-
-            .navbar a {
-                font-size: 16px;
-                padding: 10px;
-                text-align: center;
-            }
-        }
+    .navbar a {
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 16px;
+        padding: 12px;
+        background-color: rgba(255, 255, 255, 0.2); /* Consistent with desktop */
+    }
+}
 
         /* CONTAINER */
         .container {
@@ -226,19 +219,20 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="navbar-links" id="navbarLinks">
-            <a href="index.html">&#8592; Back to Home</a>
-            <a href="updated_health_calc.html">BMI Calculator</a>
-            <a href="foodCalculator.html">Food Calculator</a>
-            <a href="mealCalculator.html">Meal Calculator</a>
-        </div>
+   <div class="navbar">
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
+    <div class="navbar-links" id="navbarLinks">
+        <a href="index.html">&#8592; Home</a>
+        <a href="updated_health_calc.html">BMI Calculator</a>
+        <a href="foodCalculator.html">Food Calculator</a>
+        <a href="mealCalculator.html">Meal Calculator</a>
+        <a href="credits.html">Credits</a>
+    </div>
+</div>
 
     <div class="container">
         <h2>Meal Nutrition Calculator</h2>
@@ -307,8 +301,21 @@
         }
 
         function toggleMenu() {
-            document.getElementById('navbarLinks').classList.toggle('active');
-        }
+    const navbarLinks = document.getElementById("navbarLinks");
+    navbarLinks.classList.toggle("active");
+    
+    // Animate hamburger icon
+    const bars = document.querySelectorAll('.menu-toggle div');
+    if (navbarLinks.classList.contains('active')) {
+        bars[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
+        bars[1].style.opacity = '0';
+        bars[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
+    } else {
+        bars[0].style.transform = 'none';
+        bars[1].style.opacity = '1';
+        bars[2].style.transform = 'none';
+    }
+}
 
         window.onload = fetchMealData;
     </script>
