@@ -71,59 +71,58 @@
             transform: translateY(-2px);
         }
 
-       .menu-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    padding: 10px;
-}
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+        }
 
-.menu-toggle div {
-    width: 25px;
-    height: 3px;
-    background: white;
-    margin: 4px 0;
-    transition: all 0.3s;
-}
+        .menu-toggle div {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            transition: all 0.3s;
+        }
 
-@media (max-width: 768px) {
-    .navbar {
-        padding: 12px 15px;
-    }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 15px;
+            }
 
-    .navbar-links {
-        display: none;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        flex-direction: column;
-        background-color: #1abc9c; /* Solid color for mobile */
-        width: 100%;
-        padding: 15px 0;
-        gap: 10px;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    }
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                flex-direction: column;
+                background-color: #1abc9c;
+                width: 100%;
+                padding: 15px 0;
+                gap: 10px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
 
-    .navbar-links.active {
-        display: flex;
-    }
+            .navbar-links.active {
+                display: flex;
+            }
 
-    .menu-toggle {
-        display: flex;
-    }
+            .menu-toggle {
+                display: flex;
+            }
 
-    .navbar a {
-        width: 90%;
-        margin: 0 auto;
-        text-align: center;
-        font-size: 16px;
-        padding: 12px;
-        background-color: rgba(255, 255, 255, 0.2); /* Consistent with desktop */
-    }
-}
-
+            .navbar a {
+                width: 90%;
+                margin: 0 auto;
+                text-align: center;
+                font-size: 16px;
+                padding: 12px;
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+        }
 
         .container {
             background: rgba(255, 255, 255, 0.9);
@@ -240,6 +239,14 @@
             border-radius: 4px;
         }
 
+        .disclaimer {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 20px;
+            text-align: center;
+            font-style: italic;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -276,17 +283,17 @@
 
         <div class="input-group">
             <label for="age">Age (years)</label>
-            <input type="number" id="age" min="2" max="120" placeholder="Enter your age">
+            <input type="number" id="age" min="2" max="120" placeholder="Enter your age (2-120)">
         </div>
 
         <div class="input-group">
             <label for="height">Height (cm)</label>
-            <input type="number" id="height" min="50" max="300" placeholder="Enter your height">
+            <input type="number" id="height" min="50" max="272" placeholder="Enter your height (50-272cm)">
         </div>
 
         <div class="input-group">
             <label for="weight">Weight (kg)</label>
-            <input type="number" id="weight" min="10" max="300" placeholder="Enter your weight">
+            <input type="number" id="weight" min="2" max="635" placeholder="Enter your weight (2-635kg)">
         </div>
 
         <div class="input-group">
@@ -310,9 +317,29 @@
             <div class="scale-item overweight">Overweight<br>25 - 29.9</div>
             <div class="scale-item obese">Obese<br>≥ 30</div>
         </div>
+
+        <div class="disclaimer">
+            Note: BMI may not be accurate for children, pregnant women, or highly muscular individuals.
+        </div>
     </div>
 
     <script>
+        // Input limits enforcement
+        document.getElementById('height').addEventListener('input', function() {
+            if (this.value > 272) this.value = 272;
+            if (this.value < 50) this.value = 50;
+        });
+
+        document.getElementById('weight').addEventListener('input', function() {
+            if (this.value > 635) this.value = 635;
+            if (this.value < 2) this.value = 2;
+        });
+
+        document.getElementById('age').addEventListener('input', function() {
+            if (this.value > 120) this.value = 120;
+            if (this.value < 2) this.value = 2;
+        });
+
         function toggleMenu() {
             const navbarLinks = document.getElementById('navbarLinks');
             navbarLinks.classList.toggle('active');
@@ -339,16 +366,16 @@
 
             resultElement.classList.remove('show');
 
-            if (isNaN(age)) {
-                showError("Please enter a valid age");
+            if (isNaN(age) || age < 2 || age > 120) {
+                showError("Please enter a valid age between 2-120 years");
                 return;
             }
-            if (isNaN(height) || height < 50 || height > 300) {
-                showError("Please enter a valid height between 50-300 cm");
+            if (isNaN(height) || height < 50 || height > 272) {
+                showError("Please enter a valid height between 50-272 cm");
                 return;
             }
-            if (isNaN(weight) || weight < 10 || weight > 300) {
-                showError("Please enter a valid weight between 10-300 kg");
+            if (isNaN(weight) || weight < 2 || weight > 635) {
+                showError("Please enter a valid weight between 2-635 kg");
                 return;
             }
 
