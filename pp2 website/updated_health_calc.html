@@ -366,15 +366,15 @@
 
             resultElement.classList.remove('show');
 
-            if (isNaN(age) || age < 2 || age > 120) {
+            if (isNaN(age) || age > 120) {
                 showError("Please enter a valid age between 2-120 years");
                 return;
             }
-            if (isNaN(height) || height < 50 || height > 272) {
+            if (isNaN(height) || height > 272) {
                 showError("Please enter a valid height between 50-272 cm");
                 return;
             }
-            if (isNaN(weight) || weight < 2 || weight > 635) {
+            if (isNaN(weight) || weight > 635) {
                 showError("Please enter a valid weight between 2-635 kg");
                 return;
             }
